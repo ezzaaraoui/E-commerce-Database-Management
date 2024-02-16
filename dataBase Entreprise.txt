@@ -1,0 +1,97 @@
+
+
+mysql> create database entreprise_vente;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use entreprise_vente
+Database changed
+mysql> CREATE TABLE client (
+    ->     client_id INT AUTO_INCREMENT,
+    ->     nom VARCHAR(10),
+    ->     prenom VARCHAR(10),  -- Corrected typo here
+    ->     email VARCHAR(45),
+    ->     adresse VARCHAR(45),
+    ->     telephone VARCHAR(45),
+    ->     PRIMARY KEY (client_id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE produits(
+    ->     id_produit INT AUTO_INCREMENT,
+    ->     nom VARCHAR(10),
+    ->     description VARCHAR(255),
+    ->     prix DECIMAL(10, 2),
+    ->     stock INT,
+    ->     PRIMARY KEY (id_produit)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE commandes (
+    ->     id_commande INT,
+    ->     id_client INT,
+    ->     date_commande DATE,
+    ->     statue VARCHAR(25),
+    ->     total DECIMAL(10,2), 
+    ->     PRIMARY KEY (id_commande),
+    ->     FOREIGN KEY (id_client) REFERENCES client (client_id)  
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> alter table commandes
+    -> ADD CONSTRAINT check_statut CHECK (statue IN ('en cours','livrée','annulée'));
+Query OK, 0 rows affected (0.14 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table commandes
+    -> modify column statue varchar(25) default 'en cours';
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++----------------------------+
+| Tables_in_entreprise_vente |
++----------------------------+
+| client                     |
+| commandes                  |
+| produits                   |
++----------------------------+
+3 rows in set (0.03 sec)
+
+mysql> desc client;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| client_id | int         | NO   | PRI | NULL    | auto_increment |
+| nom       | varchar(10) | YES  |     | NULL    |                |
+| prenom    | varchar(10) | YES  |     | NULL    |                |
+| email     | varchar(45) | YES  |     | NULL    |                |
+| adresse   | varchar(45) | YES  |     | NULL    |                |
+| telephone | varchar(45) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+6 rows in set (0.02 sec)
+
+mysql> desc commandes;
++---------------+---------------+------+-----+----------+-------+
+| Field         | Type          | Null | Key | Default  | Extra |
++---------------+---------------+------+-----+----------+-------+
+| id_commande   | int           | NO   | PRI | NULL     |       |
+| id_client     | int           | YES  | MUL | NULL     |       |
+| date_commande | date          | YES  |     | NULL     |       |
+| statue        | varchar(25)   | YES  |     | en cours |       |
+| total         | decimal(10,2) | YES  |     | NULL     |       |
++---------------+---------------+------+-----+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc produits;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| id_produit  | int           | NO   | PRI | NULL    | auto_increment |
+| nom         | varchar(10)   | YES  |     | NULL    |                |
+| description | varchar(255)  | YES  |     | NULL    |                |
+| prix        | decimal(10,2) | YES  |     | NULL    |                |
+| stock       | int           | YES  |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql>
